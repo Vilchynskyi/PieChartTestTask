@@ -114,7 +114,7 @@ class PieChart extends Component {
                             }
                     </g>
                 </svg>
-                <div>
+                <div className="sliceTitle">
                     {titlesArray[hoverItemIndex]}
                 </div>
                 <li className="titlesList">
