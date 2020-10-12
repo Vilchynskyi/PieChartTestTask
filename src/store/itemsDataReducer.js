@@ -1,12 +1,12 @@
 const itemsDataReducer = (state = {
     items: [
         {
-            title: undefined,
-            value: undefined
+            title: 'qwe',
+            value: 234
         },
         {
-            title: undefined,
-            value: undefined
+            title: 'asd',
+            value: 342
         },
     ]
 }, action) => {
