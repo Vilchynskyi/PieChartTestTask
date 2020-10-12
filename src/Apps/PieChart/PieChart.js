@@ -1,24 +1,11 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import { findLast } from 'lodash'
+
 
 class PieChart extends Component {
 
     state = {
         hoverItemIndex: undefined
-    }
-
-    getRandomColor(numberOfItems) {
-        let colorsArray = [];
-        for (let i = 0; i < numberOfItems; i++){
-            let letters = '0123456789ABCDEF';
-            let color = '#';
-            for (let i = 0; i < 6; i++) {
-              color += letters[Math.floor(Math.random() * 16)];
-            }
-            colorsArray.push(color);
-        }
-        return colorsArray;
     }
 
     getValues(){
@@ -93,16 +80,17 @@ class PieChart extends Component {
 
     render() {
         const {
+            itemsList 
+        } = this.props;
+        const {
             hoverItemIndex
         } = this.state; 
         const titlesArray = this.getTitles();
         const valuesArray = this.getValues();
         const pointsArray = this.getPoints(valuesArray);
         const flagsArray = this.getFlags(valuesArray);
-        const colorsArray = this.getRandomColor(pointsArray.length);
         const percentsArray = this.getPercents(valuesArray);
 
-        console.log("colors array   ", colorsArray);
         return (
             
             <div className="pieChartComponent">
@@ -117,7 +105,7 @@ class PieChart extends Component {
                                             key={index + 1}
                                             className="pieSlice"
                                             d={`M0,0 L${prevX},${prevY} A100,100 0 ${flagsArray[index]},1 ${x},${y} Z`}
-                                            fill={colorsArray[index]}
+                                            fill={itemsList[index].color}
                                             onMouseOver={() => this.setState({ hoverItemIndex: index })}
                                             onMouseLeave={() => this.setState({ hoverItemIndex: '' })}
                                         />
@@ -132,7 +120,9 @@ class PieChart extends Component {
                 <li className="titlesList">
                     {   titlesArray.map((title, index) => {
                             return (
-                                <ul style={{ color: colorsArray[index] }}>{title} - {valuesArray[index]} ({percentsArray[index]}%)</ul>
+                                <ul key={index + 1} style={{ color: itemsList[index].color }}>
+                                    {title} - {valuesArray[index]} ({percentsArray[index]}%)
+                                </ul>
                             )
                         })
                     }
