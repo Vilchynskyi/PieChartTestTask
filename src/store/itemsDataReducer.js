@@ -1,13 +1,15 @@
+import getRandomColor from "../utils/getRandomColor";
+
 const itemsDataReducer = (state = {
     items: [
         {
-            title: 'qwe',
-            value: 234,
+            title: undefined,
+            value: undefined,
             color: getRandomColor()
         },
         {
-            title: 'asd',
-            value: 342,
+            title: undefined,
+            value: undefined,
             color: getRandomColor()
         },
     ]
@@ -28,15 +30,6 @@ const itemsDataReducer = (state = {
         default:
             return state;
     }
-}
-
-const getRandomColor = () => {
-    let letters = '0123456789ABCDEF';
-    let color = '#';
-    for (let i = 0; i < 6; i++) {
-        color += letters[Math.floor(Math.random() * 16)];
-    }
-    return color
 }
 
 export default itemsDataReducer

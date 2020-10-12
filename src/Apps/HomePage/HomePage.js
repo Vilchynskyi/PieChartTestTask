@@ -35,13 +35,14 @@ class HomePage extends Component {
             <div className="homePage">
                 <h1 className="pageTitle">PieChart</h1>
                 <h2 className="pageDesc">Please, insert at least 2 items</h2>
-                {itemsList.map((item, index) => {
+                {itemsList.map((item = {}, index) => {
                         const {
                             title,
                             value
                         } = item;
+                        const itemKey = index + 1;
                         return (
-                            <div className="itemInputs" key={index + 1}>
+                            <div className="itemInputs" key={itemKey}>
                                 <div className="formGroup">
                                     <input className="formField" type="text" name="title" placeholder="Title"
                                         value={title}

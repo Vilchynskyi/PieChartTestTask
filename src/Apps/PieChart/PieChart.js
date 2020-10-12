@@ -97,12 +97,13 @@ class PieChart extends Component {
                 <svg viewBox="-125 -125 250 250" height="300px" width="300px" xmlns="http://www.w3.org/2000/svg">
                     <g transform="rotate(-90)">
                             {   pointsArray.map((point, index) => {
+                                    const itemKey = index + 1;
                                     const [x, y] = point;
                                     const prevPoint = index !== 0 ? pointsArray[index - 1] : pointsArray[pointsArray.length - 1];
                                     const [prevX, prevY] = prevPoint;
                                     return (
                                         <path
-                                            key={index + 1}
+                                            key={itemKey}
                                             className="pieSlice"
                                             d={`M0,0 L${prevX},${prevY} A100,100 0 ${flagsArray[index]},1 ${x},${y} Z`}
                                             fill={itemsList[index].color}
@@ -118,9 +119,10 @@ class PieChart extends Component {
                     {titlesArray[hoverItemIndex]}
                 </div>
                 <li className="titlesList">
-                    {   titlesArray.map((title, index) => {
+                    { titlesArray.map((title, index) => {
+                        const itemKey = index + 1;
                             return (
-                                <ul key={index + 1} style={{ color: itemsList[index].color }}>
+                                <ul key={itemKey} style={{ color: itemsList[index].color }}>
                                     {title} - {valuesArray[index]} ({percentsArray[index]}%)
                                 </ul>
                             )
