@@ -20,7 +20,7 @@ class HomePage extends Component {
         updateItemValueState(index, value);
     } 
 
-    buttonHandler = () => {
+    addNewItemBtn = () => {
         const {
             addNewItem
         } = this.props;
@@ -29,13 +29,13 @@ class HomePage extends Component {
 
     render() {
         const {
-            items,
+            itemsList
         } = this.props;
         return (
             <div className="homePage">
                 <h1 className="pageTitle">PieChart</h1>
                 <h2 className="pageDesc">Please, insert at least 2 items</h2>
-                {items.map((item, index) => {
+                {itemsList.map((item, index) => {
                         const {
                             title,
                             value
@@ -46,7 +46,7 @@ class HomePage extends Component {
                                     <input className="formField" type="text" name="title" placeholder="Title"
                                         value={title}
                                         onChange={(event) => this.itemTitleHandler(index, event)}
-                                        required autoComplete="off" 
+                                        autoComplete="off" 
                                     />
                                     <label className="formLabel" htmlFor="title">Title</label>
                                 </div>
@@ -54,14 +54,14 @@ class HomePage extends Component {
                                     <input className="formField" name="value" placeholder="Value"
                                         value={value}
                                         onChange={(event) => this.itemValueHandler(index, event)}
-                                        type="number" required
+                                        type="number"
                                     />
                                     <label className="formLabel" htmlFor="value">Value</label>
                                 </div>
                             </div>
                         )
                 })}
-                <div className="button" onClick={this.buttonHandler}>ADD NEW ITEM</div>
+                <div className="button" onClick={this.addNewItemBtn}>ADD NEW ITEM</div>
                 <NavLink className="button" to="/piechart"> Show PieChart</NavLink>
             </div>
         )
@@ -69,7 +69,7 @@ class HomePage extends Component {
 }
 
 const mapStateToProps = (state) => ({
-    items: state.items
+    itemsList: state.items
 })
 
 const mapDispatchToProps = (dispatch) => ({

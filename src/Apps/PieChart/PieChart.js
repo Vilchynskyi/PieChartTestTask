@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-
+import { findLast } from 'lodash'
 
 class PieChart extends Component {
 
@@ -10,7 +10,7 @@ class PieChart extends Component {
 
     getRandomColor(numberOfItems) {
         let colorsArray = [];
-        for (let i=0; i < numberOfItems; i++){
+        for (let i = 0; i < numberOfItems; i++){
             let letters = '0123456789ABCDEF';
             let color = '#';
             for (let i = 0; i < 6; i++) {
@@ -23,10 +23,10 @@ class PieChart extends Component {
 
     getValues(){
         const {
-            items
+            itemsList
         } = this.props;
         let valuesArray = [];
-        items.forEach((item = {}) => {
+        itemsList.forEach((item = {}) => {
             const { value } = item;
             valuesArray.push(value);
         })
@@ -35,10 +35,10 @@ class PieChart extends Component {
 
     getTitles(){
         const {
-            items
+            itemsList
         } = this.props;
         let titlesArray = [];
-        items.forEach((item) => {
+        itemsList.forEach((item) => {
             const { title } = item;
             titlesArray.push(title);
         })
@@ -47,11 +47,11 @@ class PieChart extends Component {
 
     getPoints(){
         const {
-            items,
+            itemsList,
         } = this.props;
         
         let valuesArray = []
-        items.forEach((item = {}) => {
+        itemsList.forEach((item = {}) => {
             const { value } = item;
             valuesArray.push(value);
         })
@@ -94,7 +94,7 @@ class PieChart extends Component {
     render() {
         const {
             hoverItemIndex
-        } = this.state 
+        } = this.state; 
         const titlesArray = this.getTitles();
         const valuesArray = this.getValues();
         const pointsArray = this.getPoints(valuesArray);
@@ -102,26 +102,28 @@ class PieChart extends Component {
         const colorsArray = this.getRandomColor(pointsArray.length);
         const percentsArray = this.getPercents(valuesArray);
 
+        console.log("colors array   ", colorsArray);
         return (
+            
             <div className="pieChartComponent">
-                {}
                 <svg viewBox="-125 -125 250 250" height="300px" width="300px" xmlns="http://www.w3.org/2000/svg">
                     <g transform="rotate(-90)">
-                            { pointsArray.map((point, index) => {
-                                const [x, y] = point;
-                                const prevPoint = index !== 0 ? pointsArray[index - 1] : pointsArray[pointsArray.length - 1];
-                                const [prevX, prevY] = prevPoint;
-                                return (
-                                    <path
-                                        key={index + 1}
-                                        className="pieSlice"
-                                        d={`M0,0 L${prevX},${prevY} A100,100 0 ${flagsArray[index]},1 ${x},${y} Z`}
-                                        fill={colorsArray[index]}
-                                        onMouseOver={() => this.setState({ hoverItemIndex: index })}
-                                        onMouseLeave={() => this.setState({ hoverItemIndex: '' })}
-                                    />
-                                )
-                            }) }
+                            {   pointsArray.map((point, index) => {
+                                    const [x, y] = point;
+                                    const prevPoint = index !== 0 ? pointsArray[index - 1] : pointsArray[pointsArray.length - 1];
+                                    const [prevX, prevY] = prevPoint;
+                                    return (
+                                        <path
+                                            key={index + 1}
+                                            className="pieSlice"
+                                            d={`M0,0 L${prevX},${prevY} A100,100 0 ${flagsArray[index]},1 ${x},${y} Z`}
+                                            fill={colorsArray[index]}
+                                            onMouseOver={() => this.setState({ hoverItemIndex: index })}
+                                            onMouseLeave={() => this.setState({ hoverItemIndex: '' })}
+                                        />
+                                    )
+                                })
+                            }
                     </g>
                 </svg>
                 <div>
@@ -142,7 +144,7 @@ class PieChart extends Component {
 
 
 const mapStateToProps = (state) => ({
-    items: state.items 
+    itemsList: state.items 
 })
 
 export default connect(
