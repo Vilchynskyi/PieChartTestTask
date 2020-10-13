@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-
+import { isEmpty } from 'lodash';
 
 class PieChart extends Component {
 
@@ -8,12 +8,17 @@ class PieChart extends Component {
         hoverItemIndex: undefined
     }
 
+    validateItems(itemsList) {
+        return itemsList.filter(item => item.value && item.title);
+    }
+
     getValues(){
         const {
             itemsList
         } = this.props;
+        const validItemsList = this.validateItems(itemsList);
         let valuesArray = [];
-        itemsList.forEach((item = {}) => {
+        validItemsList.forEach((item = {}) => {
             const { value } = item;
             valuesArray.push(value);
         })
@@ -32,17 +37,8 @@ class PieChart extends Component {
         return titlesArray;
     }
 
-    getPoints(){
-        const {
-            itemsList,
-        } = this.props;
-        
-        let valuesArray = []
-        itemsList.forEach((item = {}) => {
-            const { value } = item;
-            valuesArray.push(value);
-        })
-        
+    getPoints(valuesArray) {
+        if (isEmpty(valuesArray)) return []
         let acc = 0;
         let totalAmount = valuesArray.reduce((acc, item) => acc + item); 
         
@@ -58,7 +54,8 @@ class PieChart extends Component {
         return pointsArray;
     }
 
-    getPercents(valuesArray){
+    getPercents(valuesArray = []) {
+        if (isEmpty(valuesArray)) return []
         let sumOfValues = valuesArray.reduce((acc, value) => acc + value);
         let percentsArray = valuesArray.map((value) => {
             let result = value * 100 / sumOfValues;
@@ -67,7 +64,8 @@ class PieChart extends Component {
         return percentsArray;
     }
 
-    getFlags(valuesArray){
+    getFlags(valuesArray = []) {
+        if (isEmpty(valuesArray)) return []
         let largeArcFlagsArray = [];
         let sumOfValues = valuesArray.reduce((acc, value) => acc + value);
         largeArcFlagsArray = valuesArray.map((value) => {
@@ -84,7 +82,8 @@ class PieChart extends Component {
         } = this.props;
         const {
             hoverItemIndex
-        } = this.state; 
+        } = this.state;
+        
         const titlesArray = this.getTitles();
         const valuesArray = this.getValues();
         const pointsArray = this.getPoints(valuesArray);
@@ -92,43 +91,47 @@ class PieChart extends Component {
         const percentsArray = this.getPercents(valuesArray);
 
         return (
-            
-            <div className="pieChartComponent">
-                <svg viewBox="-125 -125 250 250" height="300px" width="300px" xmlns="http://www.w3.org/2000/svg">
-                    <g transform="rotate(-90)">
-                            {   pointsArray.map((point, index) => {
-                                    const itemKey = index + 1;
-                                    const [x, y] = point;
-                                    const prevPoint = index !== 0 ? pointsArray[index - 1] : pointsArray[pointsArray.length - 1];
-                                    const [prevX, prevY] = prevPoint;
-                                    return (
-                                        <path
-                                            key={itemKey}
-                                            className="pieSlice"
-                                            d={`M0,0 L${prevX},${prevY} A100,100 0 ${flagsArray[index]},1 ${x},${y} Z`}
-                                            fill={itemsList[index].color}
-                                            onMouseOver={() => this.setState({ hoverItemIndex: index })}
-                                            onMouseLeave={() => this.setState({ hoverItemIndex: '' })}
-                                        />
-                                    )
-                                })
-                            }
-                    </g>
-                </svg>
-                <div className="sliceTitle">
-                    {titlesArray[hoverItemIndex]}
-                </div>
-                <li className="titlesList">
-                    { titlesArray.map((title, index) => {
-                        const itemKey = index + 1;
+            <div>
+                { isEmpty(valuesArray) && <h1>Please, go back to the main page and enter all data correctly</h1>}
+                { !isEmpty(valuesArray) &&
+                <div className="pieChartComponent">
+                    <svg viewBox="-125 -125 250 250" height="300px" width="300px" xmlns="http://www.w3.org/2000/svg">
+                        <g transform="rotate(-90)">
+                                {   pointsArray.map((point, index) => {
+                                        const itemKey = index + 1;
+                                        const [x, y] = point;
+                                        const prevPoint = index !== 0 ? pointsArray[index - 1] : pointsArray[pointsArray.length - 1];
+                                        const [prevX, prevY] = prevPoint;
+                                        return (
+                                            <path
+                                                key={itemKey}
+                                                className="pieSlice"
+                                                d={`M0,0 L${prevX},${prevY} A100,100 0 ${flagsArray[index]},1 ${x},${y} Z`}
+                                                fill={itemsList[index].color}
+                                                onMouseOver={() => this.setState({ hoverItemIndex: index })}
+                                                onMouseLeave={() => this.setState({ hoverItemIndex: '' })}
+                                            />
+                                        )
+                                    })
+                                }
+                        </g>
+                    </svg>
+                    <div className="sliceTitle">
+                        {titlesArray[hoverItemIndex]}
+                    </div>
+                    <li className="titlesList">
+                        { titlesArray.map((title, index) => {
+                            const itemKey = index + 1;
                             return (
                                 <ul key={itemKey} style={{ color: itemsList[index].color }}>
                                     {title} - {valuesArray[index]} ({percentsArray[index]}%)
                                 </ul>
                             )
-                        })
-                    }
-                </li>
+                            })
+                        }
+                    </li>
+                </div>
+                }   
             </div>
         )
     }

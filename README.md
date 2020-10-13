@@ -6,7 +6,7 @@ Created by Vilchynskyi Roman
 
 
 ```sh
-$ cd PieChartTestTask-main
+$ cd PieChartTestTask
 $ npm install -d
 $ npm start
 ```
