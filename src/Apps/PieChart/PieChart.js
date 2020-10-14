@@ -119,17 +119,17 @@ class PieChart extends Component {
                     <div className="sliceTitle">
                         {titlesArray[hoverItemIndex]}
                     </div>
-                    <li className="titlesList">
+                    <ul className="titlesList">
                         { titlesArray.map((title, index) => {
                             const itemKey = index + 1;
                             return (
-                                <ul key={itemKey} style={{ color: itemsList[index].color }}>
+                                <li key={itemKey} style={{ color: itemsList[index].color }}>
                                     {title} - {valuesArray[index]} ({percentsArray[index]}%)
-                                </ul>
+                                </li>
                             )
                             })
                         }
-                    </li>
+                    </ul>
                 </div>
                 }   
             </div>
