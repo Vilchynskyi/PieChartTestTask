@@ -1,4 +1,4 @@
-# PieChart - test task
+# PieChart
 
 Created by Vilchynskyi Roman
 
